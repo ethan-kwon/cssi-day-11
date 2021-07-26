@@ -5,6 +5,8 @@ window.onload = () => {
         if (user) {
             // this code runs if the user is logged in
             console.log("logged in as", user.displayName)
+            const welcomeMessage = document.querySelector("#welcome");
+            welcomeMessage.innerHTML = `Welcome ${user.displayName} <br> What's on your mind?`
             googleUser = user;
         } else {
             // this code runs if the user is not logged in
@@ -19,10 +21,14 @@ window.onload = () => {
         const noteText = document.querySelector("#noteText").value;
         console.log(noteTitle, noteText);
 
+        const timeElapsed = Date.now();
+        const today = new Date(timeElapsed);
+
         // write these values to the database
         firebase.database().ref(`/users/${googleUser.uid}`).push({
             title: noteTitle,
-            text: noteText
+            text: noteText,
+            created: today.toUTCString()
         }).then(() => {
             console.log("database write successful");
             document.querySelector("#noteTitle").value = "";
