@@ -19,7 +19,8 @@ window.onload = () => {
         // get values from the form
         const noteTitle = document.querySelector("#noteTitle").value;
         const noteText = document.querySelector("#noteText").value;
-        console.log(noteTitle, noteText);
+        const noteLabels = document.querySelector("#noteLabels").value;
+        console.log(noteTitle, noteText, noteLabels.split(" "));
 
         const timeElapsed = Date.now();
         const today = new Date(timeElapsed);
@@ -28,11 +29,13 @@ window.onload = () => {
         firebase.database().ref(`/users/${googleUser.uid}`).push({
             title: noteTitle,
             text: noteText,
-            created: today.toUTCString()
+            created: today.toUTCString(),
+            labels: noteLabels.split(" ")
         }).then(() => {
             console.log("database write successful");
             document.querySelector("#noteTitle").value = "";
             document.querySelector("#noteText").value = "";
+            document.querySelector("#noteLabels").value = "";
         })
         .catch(error => {
             console.log("error writing new note: ", error);
